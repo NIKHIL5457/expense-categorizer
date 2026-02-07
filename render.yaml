@@ -2,19 +2,12 @@ services:
   - type: web
     name: expense-categorizer
     env: python
-    region: oregon  # or singapore, frankfurt, ohio
+    region: oregon  # Must be oregon for free tier
     plan: free
     buildCommand: |
       pip install --upgrade pip
       pip install -r requirements.txt
-      python train.py
-    startCommand: gunicorn app:app
+    startCommand: python app.py  # Use python directly, not gunicorn
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.9.0
-    healthCheckPath: /api/health
-    autoDeploy: true
-    disk:
-      name: expense-data
-      mountPath: /opt/render/.cache
-      sizeGB: 1
+      - key: PORT
+        value: 8080
