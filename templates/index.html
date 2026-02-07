@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ML Expense Categorizer</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-robot"></i>
+                <h1>AI Expense <span class="highlight">Categorizer</span></h1>
+            </div>
+            <p class="subtitle">Machine Learning powered expense categorization</p>
+            <div class="model-status">
+                <span id="modelStatus" class="status">
+                    <i class="fas fa-circle"></i> Loading...
+                </span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Input Card -->
+            <div class="card input-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-edit"></i> Enter Expense</h2>
+                    <p>Describe your expense in natural language</p>
+                </div>
+                
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <i class="fas fa-receipt"></i>
+                        <input type="text" 
+                               id="expenseInput" 
+                               placeholder="Example: 'going to ambala', 'pizza dinner', 'electricity bill'"
+                               autocomplete="off">
+                        <button id="clearBtn" class="clear-btn" title="Clear">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <button id="categorizeBtn" class="primary-btn">
+                        <i class="fas fa-brain"></i> Analyze with AI
+                    </button>
+                </div>
+                
+                <!-- Quick Examples -->
+                <div class="examples">
+                    <p class="examples-title">Try these examples:</p>
+                    <div class="example-chips">
+                        <button class="example-chip" data-text="going to ambala">
+                            <i class="fas fa-car"></i> Going to Ambala
+                        </button>
+                        <button class="example-chip" data-text="pizza at dominos">
+                            <i class="fas fa-pizza-slice"></i> Pizza Dinner
+                        </button>
+                        <button class="example-chip" data-text="electricity bill payment">
+                            <i class="fas fa-bolt"></i> Electricity Bill
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result Card -->
+            <div class="card result-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-chart-pie"></i> AI Analysis Result</h2>
+                </div>
+                
+                <!-- Placeholder -->
+                <div id="resultPlaceholder" class="result-placeholder">
+                    <div class="placeholder-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Ready to Analyze</h3>
+                    <p>Your expense categorization will appear here</p>
+                </div>
+                
+                <!-- Result Display -->
+                <div id="resultDisplay" class="result-display" style="display: none;">
+                    <!-- Category Badge -->
+                    <div class="category-badge" id="categoryBadge">
+                        <div class="category-icon" id="categoryIcon">
+                            <i class="fas"></i>
+                        </div>
+                        <div class="category-info">
+                            <h3 id="categoryName">Category</h3>
+                            <p id="categoryExplanation">Explanation</p>
+                        </div>
+                        <div class="confidence-score">
+                            <div class="confidence-value" id="confidenceValue">95%</div>
+                            <div class="confidence-label">AI Confidence</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Details -->
+                    <div class="result-details">
+                        <div class="detail-item">
+                            <span class="detail-label">
+                                <i class="fas fa-comment"></i> You entered:
+                            </span>
+                            <span id="inputText" class="detail-value"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">
+                                <i class="fas fa-cogs"></i> Model used:
+                            </span>
+                            <span id="modelUsed" class="detail-value"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">
+                                <i class="fas fa-lightbulb"></i> AI Insight:
+                            </span>
+                            <span id="aiInsight" class="detail-value"></span>
+                        </div>
+                    </div>
+                    
+                    <!-- Actions -->
+                    <div class="result-actions">
+                        <button id="copyBtn" class="action-btn">
+                            <i class="fas fa-copy"></i> Copy Result
+                        </button>
+                        <button id="newBtn" class="action-btn">
+                            <i class="fas fa-plus"></i> New Analysis
+                        </button>
+                        <button id="saveBtn" class="action-btn save">
+                            <i class="fas fa-save"></i> Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Categories Card -->
+            <div class="card categories-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-tags"></i> Expense Categories</h2>
+                </div>
+                
+                <div class="categories-list">
+                    <div class="category-item" data-category="food">
+                        <div class="category-icon food">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <div class="category-details">
+                            <h3>Food & Dining</h3>
+                            <p>Restaurants, groceries, cafes, food delivery</p>
+                        </div>
+                    </div>
+                    
+                    <div class="category-item" data-category="transport">
+                        <div class="category-icon transport">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="category-details">
+                            <h3>Transportation</h3>
+                            <p>Travel, fuel, tickets, commute, "going to"</p>
+                        </div>
+                    </div>
+                    
+                    <div class="category-item" data-category="shopping">
+                        <div class="category-icon shopping">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <div class="category-details">
+                            <h3>Shopping</h3>
+                            <p>Purchases, malls, online shopping, clothes</p>
+                        </div>
+                    </div>
+                    
+                    <div class="category-item" data-category="utilities">
+                        <div class="category-icon utilities">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="category-details">
+                            <h3>Utilities</h3>
+                            <p>Bills, services, recharges, subscriptions</p>
+                        </div>
+                    </div>
+                    
+                    <div class="category-item" data-category="entertainment">
+                        <div class="category-icon entertainment">
+                            <i class="fas fa-film"></i>
+                        </div>
+                        <div class="category-details">
+                            <h3>Entertainment</h3>
+                            <p>Movies, subscriptions, events, leisure</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>
+                <i class="fas fa-code"></i> 
+                Powered by Machine Learning (Random Forest + TF-IDF)
+            </p>
+            <p>
+                <i class="fas fa-bolt"></i>
+                Special detection for: "going to [location]" → Transport
+            </p>
+        </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="/static/script.js"></script>
+</body>
+</html>
